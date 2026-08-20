@@ -4,6 +4,12 @@ A personal finance dashboard: transactions, budgets, savings goals, and a chat a
 
 Live: https://ai-finance-dashboard-g6sj6rihi-bhanus-projects-5e569201.vercel.app
 
+## Demo
+
+The real dashboard, and the real fix in action — asking the chat "Am I over budget on anything?" returns a computed answer (`You're over budget on: Entertainment by $30.00.`) that matches the actual budget data exactly, not a canned string:
+
+![UI walkthrough of the dashboard and the real computed chat answer](docs/demo_ui.gif)
+
 ## What's actually here
 
 This repo previously had no real README (just the unedited `create-next-app` boilerplate), despite there being a genuinely built app underneath — real dashboard pages (`transactions`, `budgets`, `insights`), a component-based architecture (`SummaryCards`, `TransactionsTable`, `TrendChart`, `ChatAssistant`), auth pages, and an API route. Documented here for what it actually is:
