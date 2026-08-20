@@ -1,30 +1,27 @@
 import { NextResponse } from 'next/server';
+import { answerQuestion } from '@/lib/analytics';
+import { mockTransactions, mockBudgets } from '@/data/mockData';
 
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
 
-    // In a real application, you would pass this message to OpenAI/Claude API
-    // e.g., const completion = await openai.chat.completions.create({...})
-    
-    // Simulating API delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Pseudo-logic matching
-    let reply = "I analyzed your recent data. You're doing quite well overall! Is there a specific category you want me to look into?";
-    
-    if (message.toLowerCase().includes('october') || message.toLowerCase().includes('expense')) {
-      reply = "In October, your highest expense was Housing ($1,500). Your total expenses so far are roughly $2,185. Would you like a breakdown of the remaining categories?";
-    } else if (message.toLowerCase().includes('budget') || message.toLowerCase().includes('limit')) {
-      reply = "You're currently over your Entertainment budget by $30. Might be a good idea to skip the movies this weekend!";
-    } else if (message.toLowerCase().includes('income')) {
-      reply = "You received your $3,200 salary across regular intervals. Let me know if you want to track supplementary income sources.";
+    if (typeof message !== 'string' || message.trim().length === 0) {
+      return NextResponse.json({ error: 'message is required' }, { status: 400 });
     }
+
+    // Real, computed answer from the actual transaction/budget data --
+    // see src/lib/analytics.ts. This is rule-based analytics, not an
+    // LLM; the previous version of this route returned hardcoded
+    // strings regardless of the real data, with a comment admitting
+    // "in a real application you would pass this to OpenAI/Claude API."
+    // That's corrected here rather than left as-is.
+    const reply = answerQuestion(message, mockTransactions, mockBudgets);
 
     return NextResponse.json({ reply });
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to process AI chat request' },
+      { error: 'Failed to process chat request' },
       { status: 500 }
     );
   }
